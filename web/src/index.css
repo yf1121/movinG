@@ -37,4 +37,12 @@ code {
 .submitButton button {
   outline: none;
   background-color: #0000;
+  /* border-radius: 50%; */
+
 }
+
+.emojiErea {
+  margin: 50px;
+  width: 80%;
+}
+
