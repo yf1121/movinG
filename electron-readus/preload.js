@@ -10,3 +10,10 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 })
+
+window.ipcRenderer = require('electron').ipcRenderer;
+window.remote = require('electron').remote;
+
+// using destructuring assignment
+const { gsap } = remote.require("gsap/dist/gsap");
+const { MotionPathPlugin } = remote.require("gsap/dist/MotionPathPlugin");

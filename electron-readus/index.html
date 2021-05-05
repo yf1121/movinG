@@ -13,9 +13,7 @@
     <!-- We are using Node.js <span id="node-version"></span>,
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>. -->
-    <div id="comment">こめんと💽</div>
-    <input type="button" value="button" id="button1">
-    <input type="button" value="auth-button" id="autu-button">
+
     <div id="container">
       <div class="balloons">
         <div></div><div></div><div></div><div></div><div></div>
@@ -25,21 +23,19 @@
         <div></div><div></div><div></div><div></div><div></div>
       </div>
     </div>
-    <p><a href="https://1-notes.com/css-balloons-animation/" target="_blank" rel="noopener">CSS | balloons animation | ONE NOTES</a></p>
 
-    <div id="elem"></div>
+    <div id="comment">
+      コメント💬
+      <input type="text" id="input1" size="155">
+      <button type="button" id="button1">ボタン</button>
+      <script type="text/javascript" src="lib.js"></script>
+    </div>
+
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
-    <script src="./node_modules/animejs/lib/anime.min.js"></script>
-    <script>
-      var ipc = require('electron').ipcRenderer;
-      var authButton = document.getElementById('auth-button');
-      authButton.addEventListener('click', function () {
-        ipc.once('actionReply', function (event, response) {
-          processResponse(response);
-        })
-        ipc.send('invokeAction', 'someData');
-      });
-    </script>
+    <script src="./node_modules/gsap/dist/gsap.min.js"></script>
+    <!--
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+    -->
   </body>
 </html>
