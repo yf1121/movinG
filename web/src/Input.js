@@ -23,14 +23,14 @@ export default class Input extends React.Component {
   }
 
   submitClick(event) {
-    const timestamp = firebase.firestore.Timestamp.now().seconds + firebase.firestore.Timestamp.now().nanoseconds * 1/1000000000;
+    const timestamp = firebase.firestore.Timestamp.now().seconds + firebase.firestore.Timestamp.now().nanoseconds * 0.000000001;
     db.collection("reaction").doc(String(timestamp)).set({
       emoji: [this.state.text],
       user: "user2",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
+        console.log('次のメッセージが送信されました: ' + this.state.text + '\nID: ' + timestamp);
     })
     .catch((error) => {
         console.error("Error adding document: ", error);
