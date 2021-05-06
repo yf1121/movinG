@@ -22,10 +22,12 @@ function createWindow() {
     transparent: false,
     frame: true, // フレームを表示 or 非表示にする
     resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
+    alwaysOnTop:true // 追加 常に最前面にある
   });
 
   mainWindow.loadFile("index.html"); // and load the index.html of the app.
   mainWindow.maximize();
+  mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
   // mainWindow.webContents.openDevTools()
 }
 
@@ -45,6 +47,3 @@ app.whenReady().then(() => {
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

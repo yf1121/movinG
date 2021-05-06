@@ -1,21 +1,16 @@
 let button = document.getElementById('button1')
 button.onclick = function() {
     let input = document.getElementById('input1')
-    alert(input.value);
+    // alert(input.value);
     button1.style.backgroundColor = "lightblue";
-}
-let commentfield=nico = new Nico({
-  ele: document.getElementById('comment'), // スクリーンになる要素
-  // width: 400,                           // スクリーン幅
-  // height: 400,                          // スクリーン高さ
-  font: 50,                             // フォントサイズ
-  color: '#fff',                        // フォントカラー
-  speed: 3                              // 流れるスピード
-});
-nico.loop(['88888', 'かわいい', 'なんだこれw']);
 
-gsap.to(button, {
-  opacity: 0,
-  duration: 2,
-  rotation: 360,
-});
+    const balloon_elem = document.createElement("div")
+    balloon_elem.classList.add("balloon")
+    balloon_elem.innerHTML =
+        '<span><svg viewBox="0 0 300 400">'
+        + '<path d="M299.9,178C303.6,69.3,235.8,0,150,0C64.2,0-3.5,69.3,0.1,178C4,291.2,90.2,361.3,140.6,376.9l-9.2,22.8h37.2l-9.2-22.8C209.8,361.4,296,291.2,299.9,178z"></path>'
+        +'</svg></span>'
+
+    const balloon_id = document.getElementById("balloon")
+    document.body.insertBefore(balloon_elem, balloon_id)
+}
