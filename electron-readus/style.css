@@ -1,4 +1,4 @@
-#comment {
+/* #comment {
 	display: block;
 	width: 79vw;
 	height: 30px;
@@ -10,6 +10,11 @@
 	right: 10vw;
 	bottom: 10px;
 	background-color: white;
+} */
+#button1 {
+	position: absolute;
+	right:10px;
+	bottom: 50px;
 }
 
 body {

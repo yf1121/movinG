@@ -9,14 +9,14 @@
     display: block;
 	width: 79vw;
 	height: 30px;
-	border: none;
+	border: solid 2px;
 	margin-left: auto;
 	margin-right: auto;
 	position: absolute;
 	left: 10vw;
 	right: 10vw;
-	bottom: 200px;
-	background-color: lightblue;
+	bottom: 10px;
+	background-color: white;
 	overflow : hidden;
 }
 .sample02 ul{
@@ -49,32 +49,3 @@
     100% { transform: translateX(-100%)}
 }
 
-/* 2行目 */
-.comment2{
-	display: block;
-	width: 79vw;
-	height: 30px;
-	border: none;
-	margin-left: auto;
-	margin-right: auto;
-	position: absolute;
-	left: 10vw;
-	right: 10vw;
-	bottom: 100px;
-	background-color: beige;
-	overflow : hidden;
-}
-.comment2 p {
-	margin:0;
-	padding-left:79vw; /*アニメーションの範囲*/
-	display:inline-block; 
-	white-space:nowrap;
-	animation-name:marquee; /*アニメーションのクラス名*/
-	animation-timing-function:linear;/*アニメーションのタイミング・進行割合の指定*/
-	animation-duration:10s; /*アニメーションの速度*/
-	animation-iteration-count:infinite;/*アニメーションの動作回数*/
-}
-@keyframes marquee {/*動作範囲(上級者向けの設定)*/
-  from   { transform: translate(0%);} 
-  99%,to { transform: translate(-100%);}
-}
