@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import "firebase/firestore";
-import "firebase/auth";
+// import "firebase/auth";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -14,7 +14,16 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 export const db = firebase.firestore();
+const citiesRef = db.collection('data').doc('room1');
+const city =await citiesRef.get();
+alert("firebase.js");
+alert('Document data:', city.data());
+alert(city.exists);
+if (!city.exists) {
+  alert('No such document!');
+} else {
+  alert('Document data:', city.data());
+}
 export default firebase;
 // alert(db.collection("data").get("aaa"));
