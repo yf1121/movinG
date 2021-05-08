@@ -103,6 +103,27 @@ code {
   box-shadow: 0 2px 0 #cfd1d3;
 }
 
+/* .editButton {
+  background-color: #cbdbe6;
+  border-radius: 50%;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin: 3px 10px;
+  box-shadow: 0 4px 1px #cfd1d3;
+} */
+
+/* .editButton::before {
+  background: url("./img/edit.png") no-repeat;
+
+}
+
+.editButton:hover {
+  transform: translate(0, 3px);
+  box-shadow: 0 2px 0 #cfd1d3;
+} */
+
+
 .emojiArea {
   margin-top: 50px;
   margin-right: auto;
@@ -209,6 +230,56 @@ button {
 }
 
 
+/* コメント装飾のモーダル */
+.editComment p {
+  font-size: 20px;
+}
+
+.colorBtn {
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  margin: 20px;
+
+  /* background-image: linear-gradient(#d6d6d6 0%, #3c2e3d 100%); */
+}
+
+.blackbtn {
+  background-color: black;
+}
+
+.redbtn {
+  background-color: red;
+}
+
+.bluebtn {
+  background-color: blue;
+}
+
+.yellowbtn {
+  background-color: yellow;
+}
+
+.greenbtn {
+  background-color: green;
+}
+
+.black {
+  color: black;
+}
+.red {
+  color: red;
+}
+.blue {
+  color: blue;
+}
+.yellow {
+  color: yellow;
+}
+.green {
+  color: green;
+}
 
 
 /* スマホ用 */

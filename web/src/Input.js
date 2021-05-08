@@ -16,20 +16,6 @@ const db = firebase.firestore();
 Modal.setAppElement("#root"); //モーダル表示のために必要
 const strageDlUrl = "gs://moving-5e9c4.appspot.com/";
 
-function toBase64Url(url, callback){
-  var xhr = new XMLHttpRequest();
-  xhr.onload = function() {
-    var reader = new FileReader();
-    reader.onloadend = function() {
-      callback(reader.result);
-    }
-    reader.readAsDataURL(xhr.response);
-  };
-  xhr.open('GET', url);
-  xhr.responseType = 'blob';
-  xhr.send();
-}
-
 export default class Input extends React.Component {
   constructor(props) {
     super(props);
@@ -37,11 +23,17 @@ export default class Input extends React.Component {
       text: "",
       showEmoji: false,
       room: String(this.props.match.params.room),
-      emojiList: ["gs://moving-5e9c4.appspot.com/すみ.png"],
+      emojiList: ['none'],
+      emojiUrlList: [],
+      loadingModal: false,
       modalIsOpen: false,
       setIsOpen: false,
       customEmojiImage: "",
-      customEmojiId: ""
+      customEmojiId: "",
+      editModalIsOpen: false,
+      editSetIsOpen: false,
+      getColor: "black",
+
     };
     this.textChange = this.textChange.bind(this);
     this.submitClick = this.submitClick.bind(this);
@@ -51,12 +43,16 @@ export default class Input extends React.Component {
     this.changeEmojiId = this.changeEmojiId.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
     this.addEmoji = this.addEmoji.bind(this);
+    this.changeEditModalVisible = this.changeEditModalVisible.bind(this);
+    this.getColor = this.getColor.bind(this);
+    this.afterLoadingModal = this.afterLoadingModal.bind(this);
   }
 
   // input 要素でのキー入力のたびに呼び出される
   textChange(event) {
     this.setState({text: event.target.value});
   }
+
 
   // コメント送信
   submitClick(event) {
@@ -67,6 +63,7 @@ export default class Input extends React.Component {
         text: this.state.text,
         username: "anonymous",
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        color: this.state.getColor,
       })
       .then((docRef) => {
           console.log('次のメッセージが送信されました: ' + this.state.text + '\nID: ' + timestamp + '\nROOM: ' + room);
@@ -90,6 +87,7 @@ export default class Input extends React.Component {
       text: this.state.text,
       username: "anonymous",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      color: this.state.getColor,
     })
     .then((docRef) => {
         console.log('次の質問が送信されました: ' + this.state.text + '\nID: ' + timestamp + '\nROOM: ' + room);
@@ -120,15 +118,11 @@ export default class Input extends React.Component {
     alert('絵文字 :' + emojiname + ': が送信されました at ' + timestamp);
   }
 
-  // 文字の装飾
-  editClick() {
-    
-  }
-
   changeModalVisible(event) {
     this.setState({setIsOpen: !this.state.setIsOpen, modalIsOpen: !this.state.modalIsOpen});
     console.log(this.state.setIsOpen, this.state.modalIsOpen);
   }
+  
 
   // カスタム絵文字の名前を変更する処理
   changeEmojiId(event) {
@@ -153,46 +147,46 @@ export default class Input extends React.Component {
       const room = this.state.room;
       let storageRef = firebase.storage().ref().child(customEmojiId+`.png`);
 
-      const blob = firebase.firestore.Blob.fromUint8Array(img);
-      console.log(blob)
-      img = {img : blob};
+      // const blob = firebase.firestore.Blob.fromUint8Array(img);
+      // console.log(blob)
+      // img = {img : blob};
 
-      db.collection("data").doc(room).collection("emojiList").doc(customEmojiId).set({
-        url: strageDlUrl + customEmojiId + ".png",
-        file: img,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      .then((docRef) => {
-      })
-      .catch((error) => {
-          console.error("Error adding document: ", error);
-      });
-
-      db.doc('/data/' + room + "emojiList" + customEmojiId).set(img, { merge: true }).catch(error => console.log(error));
-
-      // storageRef.getMetadata().then(function(metadata) {
-      //   console.log("このファイルは存在しています");
-      //   alert("この名前はすでに使用されています");
-      // }).catch(function(error) {
-      //   if(error.code == "storage/unauthorized") {
-      //     console.log("ファイルはまだ存在しません");
-      //     storageRef.put(img)
-      //       .then(function(snapshot) {
-      //         alert(":" + customEmojiId + ": が追加されました");
-      //         thisBind.setState({setIsOpen: !thisBind.state.setIsOpen, modalIsOpen: !thisBind.state.modalIsOpen});
-      //       });
-      //     db.collection("data").doc(room).collection("emojiList").doc(customEmojiId).set({
-      //       url: strageDlUrl + customEmojiId + ".png",
-      //       file: img,
-      //       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      //     })
-      //     .then((docRef) => {
-      //     })
-      //     .catch((error) => {
-      //         console.error("Error adding document: ", error);
-      //     });
-      //   }
+      // db.collection("data").doc(room).collection("emojiList").doc(customEmojiId).set({
+      //   url: strageDlUrl + customEmojiId + ".png",
+      //   file: img,
+      //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      // })
+      // .then((docRef) => {
+      // })
+      // .catch((error) => {
+      //     console.error("Error adding document: ", error);
       // });
+
+      // db.doc('/data/' + room + "emojiList" + customEmojiId).set(img, { merge: true }).catch(error => console.log(error));
+
+      storageRef.getMetadata().then(function(metadata) {
+        console.log("このファイルは存在しています");
+        alert("この名前はすでに使用されています");
+      }).catch(function(error) {
+        if(error.code == "storage/object-not-found") {
+          console.log("ファイルはまだ存在しません", error.code);
+          storageRef.put(img)
+            .then(function(snapshot) {
+              alert(":" + customEmojiId + ": が追加されました");
+              thisBind.setState({setIsOpen: !thisBind.state.setIsOpen, modalIsOpen: !thisBind.state.modalIsOpen});
+            });
+          db.collection("data").doc(room).collection("emojiList").doc(customEmojiId).set({
+            url: strageDlUrl + customEmojiId + ".png",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then((docRef) => {
+          })
+          .catch((error) => {
+              console.error("Error adding document: ", error);
+          });
+        }
+      });
+      this.showMoreEmoji();
     } else {
       alert("絵文字の名前と画像ファイルは必須です");
     }
@@ -202,26 +196,68 @@ export default class Input extends React.Component {
   showMoreEmoji(event) {
     this.setState({showEmoji: !this.state.showEmoji})
     console.log(this.state.showEmoji);
+    console.log(this.state.emojiList, ['alligator', 'snake', 'lizard']);
 
+    if (!this.state.showEmoji) this.displayCustomEmoji();
+  }
+
+  // カスタム絵文字を表示する
+  displayCustomEmoji() {
     let listAry = [];
-    // カスタム絵文字を表示する
+    let listUrlAry = [];
+    
     db.collection("data").doc(this.state.room).collection("emojiList").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        listAry.push({name: doc.id, src: doc.data()['file']});
-        console.log(doc.id, doc.data()['file'].toBase64());
+        let gsReference = firebase.storage().refFromURL(strageDlUrl + doc.id + ".png");
+        
+        gsReference.getDownloadURL().then(function(url) {
+          // `url` is the download URL for 'images/stars.jpg'
+          listAry.push(doc.id);
+          listUrlAry.push(url);
+        }).catch(function(error) {
+          console.log("画像データの取得に失敗しました", error)
+        });
       });
     })
     this.setState({emojiList: listAry});
-    console.log(listAry)
+    this.setState({emojiUrlList: listUrlAry});
+
+    this.setState({loadingModal: true});
+    this.afterLoadingModal();
+  }
+
+  // カスタム絵文字をFirebaseから読み込むまでのローディング画面
+  afterLoadingModal(event) {
+    setTimeout(function(){
+      this.setState({successCreate: false})
+    }.bind(this),800)
+    this.setState({loadingModal: false});
+  }
+
+  // 文字の装飾
+  changeEditModalVisible(event) {
+    this.setState({editSetIsOpen: !this.state.editSetIsOpen, editModalIsOpen: !this.state.editModalIsOpen});
+    console.log(this.state.editSetIsOpen, this.state.editModalIsOpen);
+  }
+
+  getColor(color) {
+    this.setState({getColor: color});
   }
 
   render()  {
+    const emojis = this.state.emojiList;
+    const listItems = new Array;
+    for(let i=0; i<emojis.length; i++){
+      console.log(emojis[i])
+      listItems.push(<li key={emojis[i].toString()}>{emojis[i]}</li>)
+    }
+    console.log(listItems)
     return (
       <>
         <div className="senddiv">
 
           <form className="sendText">
-            <input type='text' name='comment' placeholder='コメントを入力' value={this.state.text} onChange={this.textChange}></input>
+            <input type='text' name='comment' className={this.state.getColor} placeholder='コメントを入力' value={this.state.text} onChange={this.textChange}></input>
             <div className='submitButton'>
               <button name="send_comment" type='submit' title="送信" onClick={this.submitClick}>
                 <img src={SendImg} />
@@ -231,12 +267,31 @@ export default class Input extends React.Component {
               </button>
             </div>
             <div className='editButton'>
-              <button name='edit-comment' type='button' title="コメントの装飾" onClick={this.editClick}>
+              <button name='edit-comment' type='button' title="コメントの装飾" 
+              onClick={this.changeEditModalVisible}>
                   <img src={editImg} />
               </button>
-
             </div>
           </form>
+
+          {/* コメント装飾のモーダル */}
+          <Modal isOpen={this.state.editModalIsOpen}
+          onRequestClose={this.changeEditModalVisible}>
+            <div className='editComment'>
+              <p>コメントの文字色変更</p>
+              <button type='button' className='colorBtn blackbtn'
+              onClick={this.getColor.bind(this, "black")}></button>
+              <button type='button' className='colorBtn redbtn'
+              onClick={this.getColor.bind(this, "red")}></button>
+              <button type='button' className='colorBtn bluebtn'
+              onClick={this.getColor.bind(this, "blue")}></button>
+              <button type='button' className='colorBtn yellowbtn'
+              onClick={this.getColor.bind(this, "yellow")}></button>
+              <button type='button' className='colorBtn greenbtn'
+              onClick={this.getColor.bind(this, "green")}></button>
+            </div>
+            <button onClick={this.changeEditModalVisible} className='addEmoji'>閉じる</button>
+          </Modal>
 
           <div className='emojiArea'>
             <div className='defaultEmoji'>
@@ -261,14 +316,10 @@ export default class Input extends React.Component {
               <a onClick={this.sendEmoji.bind(this, "ok")}>
                 <img src={okImg}></img>
               </a>
-              {this.state.emojiList.map((image) => {
-                return (
-                  <a onClick={this.sendEmoji.bind(this, image['name'])} title={image['name']}>
-                    <img src={image['src']}></img>
-                  </a>
-                );
-              })}
-              
+              <>{this.state.emojiList}</>
+              {this.state.emojiList.map(reptile => (
+                <a key={reptile} onClick={this.sendEmoji.bind(this, reptile)} title={reptile}><img src={this.state.emojiUrlList[this.state.emojiList.indexOf(reptile)]} /></a>
+              ))}
               <button type='button' className="addEmoji" onClick={this.changeModalVisible}>絵文字を追加</button>
             </div>
             <Modal
@@ -281,6 +332,7 @@ export default class Input extends React.Component {
               <input type="file" accept=".png" onChange={this.uploadImage} />
               <button className="addEmoji" onClick={this.addEmoji}>絵文字を追加</button>
             </Modal>
+            <Modal isOpen={this.state.loadingModal}><div>読み込み中</div></Modal>
           </div>
         </div>
       </>
