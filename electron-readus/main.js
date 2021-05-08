@@ -11,12 +11,12 @@ function createWindow() {
     transparent: true,
     frame: false, // フレームを表示 or 非表示にする
     resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
-    // alwaysOnTop: true // 追加 常に最前面にある
+    alwaysOnTop: true // 追加 常に最前面にある
   });
 
   mainWindow.loadFile("index.html"); // and load the index.html of the app.
   mainWindow.maximize();
-  // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
+  mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
   // mainWindow.webContents.openDevTools()
 }
 

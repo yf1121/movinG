@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+
+    <!--
+      Policy set or a policy with "unsafe-eval" enabled. This exposes users of this app to unnecessary security risks.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval';">
+
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>movinG</title>
@@ -50,7 +55,7 @@
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
 
-    
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <!-- <script src="/__/firebase/8.5.0/firebase-app.js"></script> -->
 
@@ -62,5 +67,6 @@
     <!-- <script src="/__/firebase/init.js"></script> -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
     <script src="./firebase_webpacked.js"></script>
+
   </body>
 </html>

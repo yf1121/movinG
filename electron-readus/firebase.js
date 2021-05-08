@@ -7,6 +7,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCd8tr0y47lvUhyL7NWT112epaxWXsMABw",
   authDomain: "moving-5e9c4.firebaseapp.com",
   projectId: "moving-5e9c4",
+  databaseURL : "https://moving-5e9c4.firebaseio.com",
   storageBucket: "moving-5e9c4.appspot.com",
   messagingSenderId: "1032830265053",
   appId: "1:1032830265053:web:f989c3ee6e6fb588669d34",
@@ -16,7 +17,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
 const citiesRef = db.collection('data').doc('room1');
-const city =await citiesRef.get();
+const city = await citiesRef.get();
 alert("firebase.js");
 alert('Document data:', city.data());
 alert(city.exists);
