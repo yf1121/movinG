@@ -25,7 +25,7 @@ jobs:
           CI: false
       # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@master
         with:
           name: build
           path: ./web/build
@@ -39,15 +39,16 @@ jobs:
         uses: actions/checkout@v2
       # ビルドした成果物を取り出します。pathの設定はuploadと合わせる必要があります
       - name: Download Artifact
-        uses: actions/download-artifact@main
+        uses: actions/download-artifact@master
         with:
           name: build
           path: ./web/build
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@main
+        uses: w9jds/firebase-action@master
         with:
           # 必要に応じて引数を足したりしてください
           args: deploy --only hosting
+          cmd: pwd && ls
           working-directory: ./web
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
