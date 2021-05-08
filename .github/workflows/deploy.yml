@@ -42,10 +42,11 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: build
+          path: ./web/build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
+          cmd: cd web
           # 必要に応じて引数を足したりしてください
           args: deploy --only hosting
         env:
