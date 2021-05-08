@@ -20,14 +20,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: cd ./web; npm ci
-      - run: npm run build --if-present
-      - run: npm test
+      - run: cd ./web; npm run build --if-present
       # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
           name: build
-          path: build
+          path: ./web/build
   deploy:
     name: Deploy
     # もし前段のbuildが通らなかったらこっちは動作しません
@@ -41,7 +40,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: build
+          path: ./web/build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
