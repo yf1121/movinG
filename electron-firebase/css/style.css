@@ -1,0 +1,135 @@
+#button1 {
+	position: absolute;
+	right: 10px;
+	bottom: 50px;
+}
+#button2 {
+	position: absolute;
+	right: 10px;
+	bottom: 90px;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+p {
+	padding: 10px;
+}
+
+.balloon_emoji {
+	position: absolute;
+	width: 3vw;
+	height: 4vw;
+	fill: #60b99a;
+	animation: 3.5s Roll ease-in-out forwards;
+}
+.balloon_emoji:nth-child(2n) {
+	animation: Roll_emoji 2.5s ease-in-out forwards;
+}
+.balloon_emoji:nth-child(3n) {
+	animation: Roll_emoji 5s ease-in-out forwards;
+}
+.balloon_emoji span {
+	display: block;
+	animation: FloatHorizontal_emoji 5s ease-in-out forwards;
+}
+.balloon_emoji svg {
+	animation: FloatVertical_emoji 5s ease-in-out forwards;
+}
+@keyframes Roll_emoji {
+	0% {
+		transform: rotateZ(15deg) scale(0.9);
+		opacity: 0.7;
+	}
+	50% {
+		transform: rotateZ(-15deg) scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: rotateZ(15deg) scale(0.9);
+		opacity: 0;
+	}
+}
+@keyframes FloatHorizontal_emoji {
+	0% {
+		transform: translate3d(10vw, 0, 0);
+	}
+	50% {
+		transform: translate3d(0vw, 0, 0);
+	}
+	100% {
+		transform: translate3d(-10vw, 0, 0);
+	}
+}
+@keyframes FloatVertical_emoji {
+	0% {
+		transform: translate3d(0, 50vw, 0);
+	}
+	70% {
+		transform: translate3d(0, -2.5vw, 0);
+	}
+	100% {
+		transform: translate3d(0, -10vw, 0);
+	}
+}
+
+.balloon_question {
+	position: absolute;
+	width: 3vw;
+	height: 4vw;
+	fill: #60b99a;
+	animation: 25s Roll_question ease-in-out forwards;
+}
+.balloon_question:nth-child(2n) {
+	animation: Roll_question 45s ease-in-out forwards;
+}
+.balloon_question:nth-child(3n) {
+	animation: Roll_question 65s ease-in-out forwards;
+}
+.balloon_question span {
+	display: block;
+	animation: FloatHorizontal_question 10s ease-in-out forwards;
+}
+.balloon_question svg {
+	animation: FloatVertical_question 10s ease-in-out forwards;
+}
+@keyframes Roll_question {
+	0% {
+		transform: rotateZ(30deg) scale(0.9);
+		opacity: 0.7;
+	}
+	50% {
+		transform: rotateZ(-30deg) scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: rotateZ(0deg) scale(0.9);
+		opacity: 0;
+	}
+}
+@keyframes FloatHorizontal_question {
+	0% {
+		transform: translate3d(85vw, 0, 0);
+	}
+	50% {
+		transform: translate3d(75vw, 0, 0);
+	}
+	100% {
+		transform: translate3d(95vw, 0, 0);
+	}
+}
+@keyframes FloatVertical_question {
+	0% {
+		transform: translate3d(0, 20vw, 0);
+	}
+	70% {
+		transform: translate3d(0, 5vw, 0);
+	}
+	100% {
+		transform: translate3d(0, -5vw, 0);
+	}
+}

@@ -31,92 +31,80 @@ global.loadModule = function ( moduleName )
 
 // Load modules. answerBrowser.js and setupApp.js are two modules in our sample app. mainapp 
 // isn't an app, but a helper library for the main electron-firebase app.
-const { app } = require('electron')
+const {app, BrowserWindow} = require('electron')
+// const { app } = require('electron')
 const { mainapp } = loadModule( 'electron-firebase' )
 const { infoRequest, showFile } = loadModule('answerBrowser')
 const { updateUserDocs } = loadModule('setupApp')
+const path = require('path')
+const firebase = require ("firebase");
+require("firebase/auth");
+require("firebase/firestore");
 
 // Some startup code
-
-!function() 
-{
-    // call this instead of console.log, so output will be suppressed if debugMode isn't set
-    global.logwrite = function( ...stuff ) {}
-
-    // one call to setup the electron-firebase framework
-    mainapp.setupAppConfig()
-
-    if ( !global.appConfig.debugMode ) return
-
-    // show all warnings, comment this line of it's too much for you
-    process.on('warning', e => console.warn(e.stack));
-
-    global.logwrite = function( ...stuff )
-    {
-        console.log.apply( null, stuff )
-    }
-}()
+const fbConfig={
+    "apiKey": "AIzaSyCd8tr0y47lvUhyL7NWT112epaxWXsMABw",
+    "authDomain": "moving-5e9c4.firebaseapp.com",
+    "databaseURL": "https://moving-5e9c4.firebaseio.com",
+    "projectId": "moving-5e9c4",
+    "storageBucket": "moving-5e9c4.appspot.com",
+    "messagingSenderId": "1032830265053",
+    "appId": "1:1032830265053:web:f989c3ee6e6fb588669d34",
+    "hostingUrl": "https://moving-5e9c4.firebaseapp.com/",
+    "serviceAccountId": "firebase-adminsdk-dxvr8@moving-5e9c4.iam.gserviceaccount.com"
+}
+firebase.initializeApp( fbConfig );
 
 // electron-firebase framework event handling
-
-mainapp.event.once( "user-login", (user) => 
-{
-    // this event will trigger on sign-in, not every time the app runs with cached credentials
-    logwrite( "EVENT user-login: ", user.displayName )
-})
-
-mainapp.event.once( "user-ready", async ( user ) => 
-{
-    logwrite( "EVENT user-ready: ", user.displayName )
-    await updateUserDocs( user, global.appContext, global.appConfig )
-    mainapp.sendToBrowser( 'app-ready' )
-})
-
-mainapp.event.once( "window-open", (window) => 
-{
-    // first event will be the main window
-    logwrite( "EVENT window-open: ", window.getTitle() )
-})
-
-mainapp.event.once( "main-window-ready", (window) => 
-{
-    logwrite( "EVENT main-window-ready: ", window.getTitle() )
-
-    // shut down the app and clean up when the main window closes
-    window.on( 'close', (event) => {
-        console.log( "CLOSE main-window-ready ", event.sender.getTitle() )
-        mainapp.closeApplication(window)
+function createWindow () {
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js')
+        },
+        transparent: true,
+        frame: false, // フレームを表示 or 非表示にする
+        resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
+        alwaysOnTop: true // 追加 常に最前面にある
     })
+    // and load the index.html of the app.
+    mainWindow.loadFile('index.html')
+    mainWindow.maximize();
+    // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools()
+}
 
-    // signout button was pressed
-    mainapp.getFromBrowser( "user-signout", mainapp.signoutUser )
-
-    // one of the information request buttons was clicked
-    mainapp.getFromBrowser( 'info-request', infoRequest )
-
-    // action request from browser
-    mainapp.getFromBrowser( 'show-file', showFile )
-})
+app.whenReady().then(() => {
+    createWindow()
+    const db = firebase.firestore();
+    const docRef = db.collection('data').doc('room1').collection('emojiList').doc('none');
+    docRef.get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!!");
+        }
+    }).catch((error) => {
+        // console.log(error);
+        console.log("Error getting document:", error);
+    });
+    app.on('activate', function () {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
+  })
 
 // This function will be called when Electron has finished initialization and is ready to create 
 // browser windows. Some APIs can only be used after this event occurs. launchInfo is macOS specific.
 // see: https://www.electronjs.org/docs/api/app#event-ready
 app.on( 'ready', async (launchInfo) => 
 {
-    logwrite( "EVENT app ready" )
-    global.launchInfo = launchInfo | {}
-    try {
-        await mainapp.startMainApp({
-            title:  "Main Window: " + global.fbConfig.projectId,
-            open_html: global.appConfig.webapp.mainPage,
-            show:true
-        })
-        // now do some other synchronous startup thing if you want to
-        // otherwise wait for the "user-ready" event
-    }
-    catch (error) {
-        console.error( error )
-    }
+
 })
 
 // see: https://electronjs.org/docs/api/app#event-activate-macos
