@@ -1,6 +1,12 @@
-import firebase from 'firebase/app';
-import "firebase/firestore";
+// import firebase from 'firebase/app';
+// import "firebase/firestore";
 // import "firebase/auth";
+
+var firebase = require("firebase/app");
+// Add the Firebase products that you want to use
+require("firebase/auth");
+require("firebase/firestore");
+// const firebase = require("electron").remote.require("firebase")
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -15,7 +21,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-export const db = firebase.firestore();
+const db = firebase.firestore();
 const citiesRef = db.collection('data').doc('room1');
 const city = await citiesRef.get();
 alert("firebase.js");
@@ -26,5 +32,5 @@ if (!city.exists) {
 } else {
   alert('Document data:', city.data());
 }
-export default firebase;
+// export default firebase;
 // alert(db.collection("data").get("aaa"));

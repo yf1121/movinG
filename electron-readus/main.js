@@ -16,7 +16,7 @@ function createWindow() {
 
   mainWindow.loadFile("index.html"); // and load the index.html of the app.
   mainWindow.maximize();
-  mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
+  // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
   // mainWindow.webContents.openDevTools()
 }
 

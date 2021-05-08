@@ -7,10 +7,11 @@
     <!--
       Policy set or a policy with "unsafe-eval" enabled. This exposes users of this app to unnecessary security risks.
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self';">
 
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <link rel="stylesheet" type="text/css" href="style.css">
+    
     <title>movinG</title>
   </head>
   <body>
@@ -20,6 +21,8 @@
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>. -->
 
+    <!-- Launch balloon-->
+    <!--
     <div id="balloon" class="balloon">
       <span>
          <svg viewBox="0 0 300 400">
@@ -29,6 +32,7 @@
         </svg>
       </span>
     </div>
+    -->
 
     <!-- <div id="comment">
       コメント💬
@@ -66,7 +70,8 @@
     <!-- Initialize Firebase -->
     <!-- <script src="/__/firebase/init.js"></script> -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
-    <script src="./firebase_webpacked.js"></script>
 
+    <script src="./firebase.js"></script>
+    
   </body>
 </html>

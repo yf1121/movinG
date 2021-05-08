@@ -13,7 +13,7 @@
 } */
 #button1 {
 	position: absolute;
-	right:10px;
+	right: 10px;
 	bottom: 50px;
 }
 
@@ -27,48 +27,58 @@ p {
 }
 
 .balloon {
+	position: absolute;
 	width: 3vw;
 	height: 4vw;
 	fill: #60b99a;
-	animation: 3.5s Roll ease-in-out infinite;
+	animation: 3.5s Roll ease-in-out forwards;
+}
+.balloon:nth-child(2n) {
+	animation: Roll 2.5s ease-in-out forwards;
+}
+.balloon:nth-child(3n) {
+	animation: Roll 5s ease-in-out forwards;
 }
 .balloon span {
 	display: block;
-	animation: FloatHorizontal 7s ease-in-out infinite alternate;
+	animation: FloatHorizontal 5s ease-in-out forwards;
 }
 .balloon svg {
-	animation: FloatVertical 6s ease-in-out infinite alternate;
+	animation: FloatVertical 5s ease-in-out forwards;
 }
 @keyframes Roll {
 	0% {
 		transform: rotateZ(15deg) scale(0.9);
+		opacity: 0.5;
 	}
 	50% {
 		transform: rotateZ(-15deg) scale(1);
+		opacity: 1;
 	}
 	100% {
 		transform: rotateZ(15deg) scale(0.9);
+		opacity: 0;
 	}
 }
 @keyframes FloatHorizontal {
 	0% {
-		transform: translate3d(2.5vw, 0, 0);
+		transform: translate3d(10vw, 0, 0);
 	}
 	50% {
-		transform: translate3d(-2.5vw, 0, 0);
+		transform: translate3d(0vw, 0, 0);
 	}
 	100% {
-		transform: translate3d(2.5vw, 0, 0);
+		transform: translate3d(-10vw, 0, 0);
 	}
 }
 @keyframes FloatVertical {
 	0% {
-		transform: translate3d(0, 2.5vw, 0);
+		transform: translate3d(0, 60vw, 0);
 	}
-	50% {
+	70% {
 		transform: translate3d(0, -2.5vw, 0);
 	}
 	100% {
-		transform: translate3d(0, 2.5vw, 0);
+		transform: translate3d(0, -10vw, 0);
 	}
 }
