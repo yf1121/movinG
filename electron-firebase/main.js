@@ -40,6 +40,8 @@ const path = require('path')
 const firebase = require ("firebase");
 require("firebase/auth");
 require("firebase/firestore");
+// require("./comment.js");
+// var mainWindow = null ;
 
 // Some startup code
 const fbConfig={
@@ -58,40 +60,98 @@ firebase.initializeApp( fbConfig );
 // electron-firebase framework event handling
 function createWindow () {
     // Create the browser window.
+    // mainWindow = new BrowserWindow({
+    //     width: 800,
+    //     height: 600,
+    //     webPreferences: {
+    //         nodeIntegration: true,
+    //         preload: path.join(__dirname, 'preload.js')
+    //     },
+    //     transparent: false,
+    //     frame: true, // フレームを表示 or 非表示にする
+    //     resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
+    //     alwaysOnTop: true // 追加 常に最前面にある
+    // })
+    // // and load the index.html of the app.
+    // mainWindow.loadFile('index.html')
+
+    // mainWindow.webContents.send('asynchronous-message', 'ping');
+
+    // mainWindow.maximize();
+    // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools()
+    // return mainWindow;
+}
+app.whenReady().then(() => {
+    // createWindow();
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
+            nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js')
         },
-        transparent: true,
-        frame: false, // フレームを表示 or 非表示にする
+        transparent: false,
+        frame: true, // フレームを表示 or 非表示にする
         resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
         alwaysOnTop: true // 追加 常に最前面にある
     })
     // and load the index.html of the app.
     mainWindow.loadFile('index.html')
-    mainWindow.maximize();
-    // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
-    // Open the DevTools.
+    mainWindow.webContents.send('asynchronous-message', 'pong');
     // mainWindow.webContents.openDevTools()
-}
 
-app.whenReady().then(() => {
-    createWindow()
     const db = firebase.firestore();
-    const docRef = db.collection('data').doc('room1').collection('emojiList').doc('none');
-    docRef.get().then((doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!!");
-        }
-    }).catch((error) => {
-        // console.log(error);
-        console.log("Error getting document:", error);
+    const {ipcMain} = require('electron');
+//asynchronous-messageチャンネルの受信処理
+    ipcMain.on('asynchronous-message', (event, arg) => {
+        // "ping"が出力される
+        console.log(arg);
+        // event.senderに送信元のプロセスが設定されているので、asynchronous-replyチャンネルで文字列"pong"を非同期通信で送信元に送信
+        event.sender.send('asynchronous-reply', 'pong');
+        // ※event.senderはwebContentsオブジェクトな
+
     });
+    //成功
+    // mainWindow.webContents.on('did-finish-load', ()=>{
+    //     mainWindow.webContents.send('asynchronous-reply', 'hoge');
+    //   })
+
+    // const docRef = db.collection('data').doc('room1').collection('emojiList').doc('none');
+    // docRef.get().then((doc) => {
+    //     if (doc.exists) {
+    //         console.log("Document data:", doc.data());
+    //     } else {
+    //         // doc.data() will be undefined in this case
+    //         console.log("No such document!!");
+    //     }
+    // }).catch((error) => {
+    //     // console.log(error);
+    //     console.log("Error getting document:", error);
+    // });
+    // docRef.onSnapshot((doc) => {
+    //     var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    //     console.log(source, " data: ", doc.data());
+    //     // console.log("Current data: ", doc.data());
+    // });
+
+    db.collection("data").doc('room1').collection('comment').onSnapshot((querySnapshot) => {
+        // console.log("Current data: ", querySnapshot.data());
+        querySnapshot.forEach((doc) => {
+            // cities.push(doc.data().name);
+            console.log("Current data: ", doc.data());
+            mainWindow.webContents.on('did-finish-load', ()=>{
+                mainWindow.webContents.send('comment', doc.data().text);
+              })
+            // console.log("decode", decoder.decode(doc.data()));
+        });
+    },(error) =>{
+        console.log("error in snapshot")
+    });
+
+    // const Ref2=db.collection('data').
+
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
@@ -102,10 +162,7 @@ app.whenReady().then(() => {
 // This function will be called when Electron has finished initialization and is ready to create 
 // browser windows. Some APIs can only be used after this event occurs. launchInfo is macOS specific.
 // see: https://www.electronjs.org/docs/api/app#event-ready
-app.on( 'ready', async (launchInfo) => 
-{
 
-})
 
 // see: https://electronjs.org/docs/api/app#event-activate-macos
 // macOS specific - Emitted when the application is activated. Various actions can trigger this 
@@ -117,3 +174,8 @@ app.on( 'activate', (appEvent,hasVisibleWindows) =>
     // do whatever
 })
 
+app.on('window-all-closed', function() {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});

@@ -1,4 +1,3 @@
-
 .sample02 {
     /* margin : 0 auto 40px;
     width : 100%;
@@ -25,8 +24,10 @@
     padding-left: 100%;
     white-space : nowrap;
     line-height : 1em;
-    animation : scrollSample02 15s linear infinite;
+    /* linear infinite */
+    animation : scrollSample02 15s ;
 }
+
 .sample02 ul li{
     display:inline;
     margin:0 100px 0 0;

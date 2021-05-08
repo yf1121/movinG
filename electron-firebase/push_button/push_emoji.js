@@ -1,6 +1,7 @@
 let button_e = document.getElementById('button1')
 button_e.onclick = function() {
-    button1.style.backgroundColor = "lightblue";
+    // これいらないと思う
+    // button1.style.backgroundColor = "lightblue";
 
     const balloon_elem = document.createElement("div")
     balloon_elem.classList.add("balloon_emoji")
