@@ -22,6 +22,12 @@ code {
   text-align: center;
 }
 
+.homePage p {
+  text-align: center;
+  font-size: 8px;
+  color: #777;
+}
+
 .enterRoom {
   display: flex;
   text-align: center;
@@ -41,6 +47,11 @@ code {
   height: 50px;
   margin: 3px 10px;
   box-shadow: 0 4px 1px #cfd1d3;
+}
+
+.enterRoom .enterButton:hover {
+  transform: translate(0, 3px);
+  box-shadow: 0 2px 0 #cfd1d3;
 }
 
 .enterRoom input {

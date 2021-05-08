@@ -13,7 +13,7 @@ export default class Input extends React.Component {
   }
 
   roomIdChange(event) {
-    let re = new RegExp("^[0-9a-zA-Z]*$", "ig");
+    let re = new RegExp("^[0-9a-zA-Z_-]*$", "ig");
     if(re.test(event.target.value)) {
       this.setState({roomid: event.target.value});
     }
@@ -28,6 +28,7 @@ export default class Input extends React.Component {
             <input type='text' name='comment' placeholder='部屋IDを入力' value={this.state.roomid} onChange={this.roomIdChange}></input>
             <Link to={'/' + this.state.roomid} className="enterButton">参加</Link>
           </div>
+          <p>※部屋IDには半角英数字とアンダーライン( _ )、ハイフン( - )が使用できます</p>
           <a href="https://github.com/yf1121/movinG">GitHubソースコード</a>
         </div>
       </>
