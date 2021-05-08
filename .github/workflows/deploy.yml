@@ -10,11 +10,15 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    working-directory: ./functions
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: ChangeDirectory
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: cd web
 
       # yarn installを実行します
       - name: Install
