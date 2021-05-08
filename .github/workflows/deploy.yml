@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: cd ./web; npm ci
       - run: npm run build --if-present
       - run: npm test
       # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
