@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Modal from 'react-modal';
 import SendImg from './img/send.png';
+import Question32Img from './img/question32.png';
 import QuestionImg from './img/question.png';
 import editImg from './img/edit.png';
 import HartImg from './img/hart.png';
@@ -23,7 +24,7 @@ export default class Input extends React.Component {
       text: "",
       showEmoji: false,
       room: String(this.props.match.params.room),
-      emojiList: ['none'],
+      emojiList: [],
       emojiUrlList: [],
       loadingModal: false,
       modalIsOpen: false,
@@ -263,7 +264,7 @@ export default class Input extends React.Component {
                 <img src={SendImg} />
               </button>
               <button name="send_question" type='button' title='質問を送る' onClick={this.sendQuestion}>
-                <img src={QuestionImg} />
+                <img src={Question32Img} />
               </button>
             </div>
             <div className='editButton'>
@@ -295,16 +296,16 @@ export default class Input extends React.Component {
 
           <div className='emojiArea'>
             <div className='defaultEmoji'>
-              <a className='qbtn' onClick={this.sendQuestion}>
+              <a className='qbtn' onClick={this.sendQuestion} title="question">
                 <img src={QuestionImg} />
               </a>
-              <a onClick={this.sendEmoji.bind(this, "heart")}>
+              <a onClick={this.sendEmoji.bind(this, "heart")} title="hart">
                 <img src={HartImg}></img>
               </a>
-              <a onClick={this.sendEmoji.bind(this, "good")}>
+              <a onClick={this.sendEmoji.bind(this, "good")} title="good">
                 <img src={GoodImg}></img>
               </a>
-              <a onClick={this.sendEmoji.bind(this, "clap")}>
+              <a onClick={this.sendEmoji.bind(this, "clap")} title="clap">
                 <img src={clapImg}></img>
               </a>
             </div>
