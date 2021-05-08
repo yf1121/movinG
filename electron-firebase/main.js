@@ -42,7 +42,7 @@ require("firebase/auth");
 require("firebase/firestore");
 // require("./comment.js");
 // var mainWindow = null ;
-
+var mainWindow;
 // Some startup code
 const fbConfig={
     "apiKey": "AIzaSyCd8tr0y47lvUhyL7NWT112epaxWXsMABw",
@@ -57,67 +57,43 @@ const fbConfig={
 }
 firebase.initializeApp( fbConfig );
 
-// electron-firebase framework event handling
 function createWindow () {
     // Create the browser window.
-    // mainWindow = new BrowserWindow({
-    //     width: 800,
-    //     height: 600,
-    //     webPreferences: {
-    //         nodeIntegration: true,
-    //         preload: path.join(__dirname, 'preload.js')
-    //     },
-    //     transparent: false,
-    //     frame: true, // フレームを表示 or 非表示にする
-    //     resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
-    //     alwaysOnTop: true // 追加 常に最前面にある
-    // })
-    // // and load the index.html of the app.
-    // mainWindow.loadFile('index.html')
-
-    // mainWindow.webContents.send('asynchronous-message', 'ping');
-
-    // mainWindow.maximize();
-    // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
-    // return mainWindow;
-}
-app.whenReady().then(() => {
-    // createWindow();
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js')
         },
-        transparent: false,
-        frame: true, // フレームを表示 or 非表示にする
+        transparent: true,
+        frame: false, // フレームを表示 or 非表示にする
         resizable: false, // ウィンドウリサイズ禁止 resizableが有効だと、一部環境によっては透過が機能しなくなる可能性があります。
         alwaysOnTop: true // 追加 常に最前面にある
     })
     // and load the index.html of the app.
     mainWindow.loadFile('index.html')
-    mainWindow.webContents.send('asynchronous-message', 'pong');
-    // mainWindow.webContents.openDevTools()
 
+    mainWindow.maximize();
+    // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools()
+}
+app.whenReady().then(() => {
+    createWindow();
     const db = firebase.firestore();
     const {ipcMain} = require('electron');
-//asynchronous-messageチャンネルの受信処理
+    //asynchronous-messageチャンネルの受信処理 preload.jsと通信してるよ
     ipcMain.on('asynchronous-message', (event, arg) => {
-        // "ping"が出力される
+        // "ping"がコンソールに出力される
         console.log(arg);
         // event.senderに送信元のプロセスが設定されているので、asynchronous-replyチャンネルで文字列"pong"を非同期通信で送信元に送信
         event.sender.send('asynchronous-reply', 'pong');
-        // ※event.senderはwebContentsオブジェクトな
+        // ※event.senderはwebContentsオブジェクト
 
     });
-    //成功
-    // mainWindow.webContents.on('did-finish-load', ()=>{
-    //     mainWindow.webContents.send('asynchronous-reply', 'hoge');
-    //   })
-
+    
+    // ひとつずつデータを取ってくる方法 get()
     // const docRef = db.collection('data').doc('room1').collection('emojiList').doc('none');
     // docRef.get().then((doc) => {
     //     if (doc.exists) {
@@ -130,27 +106,27 @@ app.whenReady().then(() => {
     //     // console.log(error);
     //     console.log("Error getting document:", error);
     // });
+
+    // 更新などを検知してデータを取ってくれる onSnapshot
     // docRef.onSnapshot((doc) => {
     //     var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
     //     console.log(source, " data: ", doc.data());
     //     // console.log("Current data: ", doc.data());
     // });
 
+    // 複数ファイルを読み込みたいときの onSnapshot
     db.collection("data").doc('room1').collection('comment').onSnapshot((querySnapshot) => {
-        // console.log("Current data: ", querySnapshot.data());
         querySnapshot.forEach((doc) => {
-            // cities.push(doc.data().name);
             console.log("Current data: ", doc.data());
             mainWindow.webContents.on('did-finish-load', ()=>{
+                // preload.jsの受信箱にデータを送信してる 
+                // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
                 mainWindow.webContents.send('comment', doc.data().text);
-              })
-            // console.log("decode", decoder.decode(doc.data()));
+            })
         });
     },(error) =>{
-        console.log("error in snapshot")
+        console.log("error in snapshot");
     });
-
-    // const Ref2=db.collection('data').
 
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
@@ -159,6 +135,7 @@ app.whenReady().then(() => {
     })
   })
 
+// 以下おまじない
 // This function will be called when Electron has finished initialization and is ready to create 
 // browser windows. Some APIs can only be used after this event occurs. launchInfo is macOS specific.
 // see: https://www.electronjs.org/docs/api/app#event-ready

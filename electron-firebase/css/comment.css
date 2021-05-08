@@ -25,20 +25,20 @@
     white-space : nowrap;
     line-height : 1em;
     /* linear infinite */
-    animation : scrollSample02 15s ;
+    animation : scrollSample02 15s linear infinite;
 }
 
 .sample02 ul li{
     display:inline;
     margin:0 100px 0 0;
 }
-.sample02 ul li:nth-child(1){
+.sample02 ul li:nth-child(1n){
     font-weight:bold;
 }
-.sample02 ul li:nth-child(2){
+.sample02 ul li:nth-child(2n){
     color:#F00;
 }
-.sample02 ul li:nth-child(3){
+.sample02 ul li:nth-child(3n){
     font-style:italic;
 }
 .sample02 ul li:last-child{
