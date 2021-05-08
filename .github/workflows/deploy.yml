@@ -25,10 +25,10 @@ jobs:
           CI: false
       # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@main
         with:
           name: build
-          path: build
+          path: ./web/build
   deploy:
     name: Deploy
     # もし前段のbuildが通らなかったらこっちは動作しません
@@ -39,12 +39,12 @@ jobs:
         uses: actions/checkout@v2
       # ビルドした成果物を取り出します。pathの設定はuploadと合わせる必要があります
       - name: Download Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@main
         with:
           name: build
-          path: build
+          path: ./web/build
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+        uses: w9jds/firebase-action@main
         with:
           # 必要に応じて引数を足したりしてください
           args: deploy --only hosting
