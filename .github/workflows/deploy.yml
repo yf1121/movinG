@@ -1,0 +1,55 @@
+name: Deploy
+
+on:
+  # mainブランチにpushしたとき動く
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    working-directory: ./functions
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # yarn installを実行します
+      - name: Install
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install
+      # yarn buildを実行します (production用のコマンドが異なる場合はcmdの部分を書き換えてください)
+      - name: Build
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: build
+      # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build
+          path: build
+  deploy:
+    name: Deploy
+    # もし前段のbuildが通らなかったらこっちは動作しません
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # ビルドした成果物を取り出します。pathの設定はuploadと合わせる必要があります
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build
+          path: build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+	  # 必要に応じて引数を足したりしてください
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
