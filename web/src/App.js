@@ -6,6 +6,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import Home from './Home.js';
 import Input from './Input.js';
 
 // const Switcher = () => {
@@ -20,7 +21,8 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <Route exact path="/" component={Input} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/:room" component={Input} />
       </Router>
     );
   }

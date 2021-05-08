@@ -12,6 +12,43 @@ code {
     monospace;
 }
 
+/* Home.jsのCSS */
+.homePage {
+  display: flex;
+  flex-direction: column;
+}
+
+.homePage h1, .homePage a {
+  text-align: center;
+}
+
+.enterRoom {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.enterRoom .enterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #0099ff;
+  border-radius: 50%;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin: 3px 10px;
+  box-shadow: 0 4px 1px #cfd1d3;
+}
+
+.enterRoom input {
+  font-size: 32px;
+  width: 50%;
+  max-width: 15em;
+}
+
 /* Input.jsのCSS */
 .senddiv {
   margin: 50px auto;
