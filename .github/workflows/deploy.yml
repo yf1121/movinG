@@ -16,20 +16,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: ChangeDirectory
-        uses: borales/actions-yarn@v2.0.0
+        uses: actions/setup-node@v1
         with:
-          cmd: cd web
-
-      # yarn installを実行します
-      - name: Install
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install
-      # yarn buildを実行します (production用のコマンドが異なる場合はcmdの部分を書き換えてください)
-      - name: Build
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: build
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
       # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
