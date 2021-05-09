@@ -27,7 +27,7 @@ jobs:
       run: cd ./electron-readus && npm install && npm install -D electron-builder
     # ここでアプリをビルド
     - name: build application
-      run: cd ./electron-readus && electron-builder --mac --x64
+      run: cd ./electron-readus && npm run build:mac
       env:
           CI: false
     # Release の作成とビルドしたパッケージのアップロード
@@ -55,7 +55,7 @@ jobs:
     - name: npm install
       run: cd ./electron-readus && npm install && npm install -D electron-builder
     - name: build application
-      run: cd ./electron-readus && electron-builder --win --x64
+      run: cd ./electron-readus && npm run build:win
       env:
           CI: false
     - name: create release
