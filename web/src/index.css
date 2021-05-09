@@ -1,13 +1,426 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* Home.jsのCSS */
+.homePage {
+  display: flex;
+  flex-direction: column;
+}
+
+.homePage h1, .homePage a {
+  text-align: center;
+}
+
+.homePage p {
+  text-align: center;
+  font-size: 8px;
+  color: #777;
+}
+
+.enterRoom {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.enterRoom .enterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #0099ff;
+  border-radius: 50%;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin: 3px 10px;
+  box-shadow: 0 4px 1px #cfd1d3;
+}
+
+.enterRoom .enterButton:hover {
+  transform: translate(0, 3px);
+  box-shadow: 0 2px 0 #cfd1d3;
+}
+
+.enterRoom input {
+  font-size: 32px;
+  width: 50%;
+  max-width: 15em;
+}
+
+/* Input.jsのCSS */
+.senddiv {
+  margin: 50px auto;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.sendText {
+  display: flex;
+}
+
+.sendText input {
+  /* font-size: 36px;  レスポンシブ */
+  width: 100%;
+  border-radius: 20px;
+  border: 2px solid #c6e4f8;
+  outline: none;
+}
+
+.submitButton {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitButton button {
+  /* outline: none; */
+  background-color: #c6e4f8;
+  border-radius: 50%;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin: 3px 10px;
+  box-shadow: 0 4px 1px #cfd1d3;
+}
+
+.submitButton button:hover {
+  transform: translate(0, 3px);
+  box-shadow: 0 2px 0 #cfd1d3;
+}
+
+.editButton {
+  background-color: #a7b7c2;
+  border-radius: 50%;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin: 3px 10px;
+  box-shadow: 0 4px 1px #999ea1;
+}
+
+/* .editButton::before {
+  background: url("./img/edit.png") no-repeat;
+
+} */
+
+.editButton:hover {
+  transform: translate(0, 3px);
+  box-shadow: 0 2px 0 #cfd1d3;
+}
+
+/* 検索ボックス */
+.searchArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.searchBox {
+  font-size: 22px;
+  height: 50px;
+  border-radius: 20px;
+  border: 2px solid #c6e4f8;
+  outline: none;
+}
+.searchArea .searchBtn {
+  height: 50px;
+  width: 50px;
+  background-image: linear-gradient(#00b7ff 0%, #2386be 100%);
+}
+
+.emojiArea {
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 80%;
+  text-align: center;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+.emojiArea a {
+  /* width: 50px;
+  height: 50px; */
+
+  display: inline-block;
+  /* text-decoration: none; */
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  /* font-size: 40px; */
+  border-radius: 50%;
+  text-align: center;
+  overflow: hidden;
+  background-image: linear-gradient(#d6d6d6 0%, #3c2e3d 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  /* border-bottom: solid 2px #b5b5b5; */
+  
+  position: relative;
+
+  /* pc用にも入れてるコード */
+  /* padding: 20px;
+  margin: 30px; */
+}
+
+.emojiArea img {
+  line-height: 80px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.emojiArea a:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  border-bottom: none;
+}
+
+.visible.emojiArea {
+  /*　画面の中央に要素を表示させる設定　*/
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  height: 400px;
+  overflow: auto;
+  width: 100%;
+  margin: 10px;
+}
+
+.invisible.emojiArea {
+  display: none;
+}
+
+.switchMoreEmoji, .addEmoji {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  width: 9em;
+  height: 2em;
+  border-radius: 1em;
+  background-color: #ffe46c;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  border: none;
+  border-bottom: solid 2px #b5b5b5;
+  margin: auto;
+  margin-top: 2em;
+  
+}
+
+.addEmojiBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  width: 80px;
+  height: 80px;
+  border-radius: 1em;
+  background-color: #ffe46c;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  border: none;
+  border-bottom: solid 2px #b5b5b5;
+  padding: 10px;
+  margin: 15px;
+  
+}
+
+.switchMoreEmoji:hover, .addEmoji:hover, .addEmojiBtn:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  border-bottom: none;
+}
+
+.emojiAddArea {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+.defaultEmoji {
+  width: 90%;
+  /* margin-bottom: 23px; */
+  /* margin: 0 auto 23px auto; */
+  padding-bottom: 3px;
+  display: inline-block;
+  text-align: justify;
+  text-align-last: left;
+}
+
+/* コメント装飾のモーダル */
+.editComment p {
+  font-size: 20px;
+}
+
+.editComment {
+  line-height: 40px;
+}
+
+.colorBtn {
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin: 20px;
+  display: inline-block;
+  box-shadow: 
+    0 2px 2px rgba(0, 0, 0, 0.19);
+}
+/* 
+.colorBtn:hover {
+  margin: 22px 20px 18px 20px;
+} */
+
+.blackbtn {
+  /* background-color: black; */
+  background-image: linear-gradient(#b6b6b6 0%, #141014 100%);
+  margin: 20px;
+  line-height: 40px;
+  box-shadow: 
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  /* border-bottom: solid 2px #b5b5b5; */
+}
+.blackbtn:hover {
+  margin: 22px 20px 18px 20px;
+  box-shadow: 
+    0 2px 2px rgba(0, 0, 0, 0.19);
+  /* border-bottom: none; */
+}
+
+.redbtn {
+  /* background-color: red; */
+  background-image: linear-gradient(#e4c1c1 0%, #ff0000 100%);
+  margin: 20px;
+}
+.redbtn:hover {
+  margin: 22px 20px 18px 20px;
+}
+
+.bluebtn {
+  /* background-color: blue; */
+  background-image: linear-gradient(rgb(136, 136, 221) 0%, blue 100%);
+  margin: 22px 20px 18px 20px;
+}
+
+.yellowbtn {
+  /* background-color: yellow; */
+  background-image: linear-gradient(#fffeef 0%, #c9bb02 100%);
+}
+
+.greenbtn {
+  /* background-color: green; */
+  background-image: linear-gradient(#b0f0b0 0%, green 100%);
+}
+
+.black {
+  color: black;
+}
+.red {
+  color: red;
+}
+.blue {
+  color: blue;
+}
+.yellow {
+  color: yellow;
+}
+.green {
+  color: green;
+}
+
+
+/* スマホ用 */
+@media screen and (max-width: 430px) {
+  .sendText input {
+    font-size: 25px;
+  }
+
+  .emojiArea a {
+    padding: 6px;
+    margin: 5px;
+  }
+
+  .enterRoom .enterButton:active {
+    transform: translate(0, 3px);
+    box-shadow: 0 2px 0 #cfd1d3;
+  }
+
+  .submitButton button:aciive {
+    transform: translate(0, 3px);
+    box-shadow: 0 2px 0 #cfd1d3;
+  }
+
+  .emojiArea a:active {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 2px 2px rgba(0, 0, 0, 0.19);
+    border-bottom: none;
+  }
+
+  .switchMoreEmoji:active, .addEmoji:active {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 1px 1px rgba(0, 0, 0, 0.19);
+  }
+}
+
+/* 中間 */
+@media screen and (min-width:431px) and (max-width: 770px) {
+  .senddiv {
+    width: 85%;
+  }
+
+  .sendText input {
+    font-size: 36px;
+  }
+
+  .emojiArea a {
+    padding: 10px;
+    margin: 15px;
+  }
+
+  .emojiArea a:hover {
+    margin: 17px 15px 13px 15px;
+  }
+}
+
+/* pc用 */
+@media screen and (min-width: 770px) {
+  .sendText input {
+    font-size: 36px;
+  }
+
+  .emojiArea a {
+    padding: 15px;
+    margin: 20px;
+  }
+
+  .emojiArea a:hover {
+    margin: 22px 20px 18px 20px;
+  }
 }

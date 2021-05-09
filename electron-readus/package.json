@@ -4,6 +4,8 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
     "start": "electron ./main.js",
     "rebuild": "./node_modules/.bin/electron-rebuild",
     "deploy": "node ./config/firebase-deploy.js"
@@ -16,10 +18,30 @@
     "tutorial",
     "demo"
   ],
+  "build": {
+    "appId": "jp.electron.moving",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "category": "Utility"
+    }
+  },
   "author": "GitHub",
   "license": "CC0-1.0",
-  "devDependencies": {},
-  "dependencies": {
-    "electron": "^12.0.7"
+  "devDependencies": {
+    "electron": "^12.0.7",
+    "electron-builder": "^22.11.1"
   }
 }
