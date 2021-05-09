@@ -75,7 +75,7 @@ function createWindow () {
     mainWindow.loadFile('index.html')
 
     mainWindow.maximize();
-    // mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
+    mainWindow.setIgnoreMouseEvents(true); // 追加 マウスイベントを無視する
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 }
@@ -122,6 +122,30 @@ app.whenReady().then(() => {
                 // preload.jsの受信箱にデータを送信してる 
                 // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
                 mainWindow.webContents.send('comment', doc.data().text);
+            })
+        });
+    },(error) =>{
+        console.log("error in snapshot");
+    });
+
+    // 絵文字の読み込み
+    db.collection("data").doc('room1').collection('emojiList').onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log("Current data: ", doc.data());
+            mainWindow.webContents.on('did-finish-load', ()=>{
+                mainWindow.webContents.send('emojiList', doc.data().url);
+            })
+        });
+    },(error) =>{
+        console.log("error in snapshot");
+    });
+
+    // 質問の読み込み
+    db.collection("data").doc('room1').collection('question').onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log("Current data: ", doc.data());
+            mainWindow.webContents.on('did-finish-load', ()=>{
+                mainWindow.webContents.send('question', doc.data().text);
             })
         });
     },(error) =>{

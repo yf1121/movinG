@@ -1,7 +1,5 @@
 let button_q = document.getElementById('button2')
 button_q.onclick = function() {
-    button2.style.backgroundColor = "lightblue";
-
     const balloon_elem = document.createElement("div")
     balloon_elem.classList.add("balloon_question")
 
@@ -12,9 +10,6 @@ button_q.onclick = function() {
     sleep(10, function () {
         balloon_elem.remove();
     });
-
-    // const balloon_id = document.getElementById("balloon")
-
 }
 function sleep(waitSec, callbackFunc) {
     // 経過時間（秒）

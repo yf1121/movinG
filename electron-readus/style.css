@@ -67,7 +67,7 @@ p {
 }
 @keyframes FloatVertical_emoji {
 	0% {
-		transform: translate3d(0, 50vw, 0);
+		transform: translate3d(0, 60vw, 0);
 	}
 	70% {
 		transform: translate3d(0, -2.5vw, 0);
@@ -82,13 +82,13 @@ p {
 	width: 3vw;
 	height: 4vw;
 	fill: #60b99a;
-	animation: 25s Roll_question ease-in-out forwards;
+	animation: 10s Roll_question ease-in-out forwards;
 }
 .balloon_question:nth-child(2n) {
-	animation: Roll_question 45s ease-in-out forwards;
+	animation: Roll_question 20s ease-in-out forwards;
 }
 .balloon_question:nth-child(3n) {
-	animation: Roll_question 65s ease-in-out forwards;
+	animation: Roll_question 30s ease-in-out forwards;
 }
 .balloon_question span {
 	display: block;
@@ -103,31 +103,31 @@ p {
 		opacity: 0.7;
 	}
 	50% {
-		transform: rotateZ(-30deg) scale(1);
+		transform: rotateZ(-60deg) scale(1);
 		opacity: 1;
 	}
 	100% {
-		transform: rotateZ(0deg) scale(0.9);
+		transform: rotateZ(-15deg) scale(0.9);
 		opacity: 0;
 	}
 }
 @keyframes FloatHorizontal_question {
 	0% {
-		transform: translate3d(85vw, 0, 0);
+		transform: translate3d(90vw, 0, 0);
 	}
 	50% {
-		transform: translate3d(75vw, 0, 0);
+		transform: translate3d(80vw, 0, 0);
 	}
 	100% {
-		transform: translate3d(95vw, 0, 0);
+		transform: translate3d(100vw, 0, 0);
 	}
 }
 @keyframes FloatVertical_question {
 	0% {
-		transform: translate3d(0, 20vw, 0);
+		transform: translate3d(0, 10vw, 0);
 	}
 	70% {
-		transform: translate3d(0, 5vw, 0);
+		transform: translate3d(0, 20vw, 0);
 	}
 	100% {
 		transform: translate3d(0, -5vw, 0);

@@ -1,8 +1,5 @@
 let button_e = document.getElementById('button1')
 button_e.onclick = function() {
-    // これいらないと思う
-    // button1.style.backgroundColor = "lightblue";
-
     const balloon_elem = document.createElement("div")
     balloon_elem.classList.add("balloon_emoji")
 
@@ -15,8 +12,6 @@ button_e.onclick = function() {
     sleep(5, function () {
         balloon_elem.remove();
     });
-
-    // const balloon_id = document.getElementById("balloon")
 
 }
 function sleep(waitSec, callbackFunc) {
