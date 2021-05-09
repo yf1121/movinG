@@ -7,6 +7,9 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
+    tags:
+    # "v" で始まる Tag 名の push だけをトリガーの対象にします (e.g., "v0.0.2")
+    - 'v*'
   pull_request:
     branches: [ main ]
 
