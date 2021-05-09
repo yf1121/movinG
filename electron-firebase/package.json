@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-build",
+    "build": "electron-builder",
     "rebuild": "./node_modules/.bin/electron-rebuild",
     "deploy": "node ./config/firebase-deploy.js",
     "start": "electron ./main.js"
