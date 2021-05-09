@@ -1,0 +1,25 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "electron test!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rebuild": "./node_modules/.bin/electron-rebuild",
+    "deploy": "node ./config/firebase-deploy.js",
+    "start": "electron ./main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nana3na/test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nana3na/test/issues"
+  },
+  "homepage": "https://github.com/nana3na/test#readme",
+  "dependencies": {
+    "electron-firebase": "^1.2.0"
+  }
+}

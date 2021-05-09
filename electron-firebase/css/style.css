@@ -56,21 +56,21 @@ p {
 }
 @keyframes FloatHorizontal_emoji {
 	0% {
-		transform: translate3d(10vw, 0, 0);
+		transform: translate3d(20vw, 0, 0);
 	}
 	50% {
 		transform: translate3d(0vw, 0, 0);
 	}
 	100% {
-		transform: translate3d(-10vw, 0, 0);
+		transform: translate3d(-20vw, 0, 0);
 	}
 }
 @keyframes FloatVertical_emoji {
 	0% {
-		transform: translate3d(0, 60vw, 0);
+		transform: translate3d(0, 65vw, 0);
 	}
 	70% {
-		transform: translate3d(0, -2.5vw, 0);
+		transform: translate3d(0, 0vw, 0);
 	}
 	100% {
 		transform: translate3d(0, -10vw, 0);
@@ -113,10 +113,10 @@ p {
 }
 @keyframes FloatHorizontal_question {
 	0% {
-		transform: translate3d(90vw, 0, 0);
+		transform: translate3d(100vw, 0, 0);
 	}
 	50% {
-		transform: translate3d(80vw, 0, 0);
+		transform: translate3d(70vw, 0, 0);
 	}
 	100% {
 		transform: translate3d(100vw, 0, 0);
