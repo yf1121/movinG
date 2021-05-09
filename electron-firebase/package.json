@@ -40,11 +40,9 @@
     "url": "https://github.com/nana3na/test/issues"
   },
   "homepage": "https://github.com/nana3na/test#readme",
-  "dependencies": {
-    "electron": "^12.0.7",
-    "electron-firebase": "^1.2.0"
-  },
   "devDependencies": {
+    "electron": "^12.0.7",
+    "electron-firebase": "^1.2.0",
     "electron-builder": "^22.11.1"
   }
 }
