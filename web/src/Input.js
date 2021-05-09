@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import SendImg from './img/send.png';
 import Question32Img from './img/question32.png';
@@ -7,8 +7,7 @@ import editImg from './img/edit.png';
 import HartImg from './img/hart.png';
 import GoodImg from './img/good.png';
 import clapImg from './img/clap.png';
-import waveImg from './img/wave.png';
-import okImg from './img/ok.png';
+import searchImg from './img/search.png';
 import styles from './index.css';
 import firebase from './firebase.js';
 // import MediaQuery from 'react-responsive';
@@ -34,6 +33,7 @@ export default class Input extends React.Component {
       editModalIsOpen: false,
       editSetIsOpen: false,
       getColor: "black",
+      searchEmoji: "",
 
     };
     this.textChange = this.textChange.bind(this);
@@ -47,18 +47,20 @@ export default class Input extends React.Component {
     this.changeEditModalVisible = this.changeEditModalVisible.bind(this);
     this.getColor = this.getColor.bind(this);
     this.afterLoadingModal = this.afterLoadingModal.bind(this);
+    this.searchName = this.searchName.bind(this);
+    this.searchBtn = this.searchBtn.bind(this);
   }
 
   // input 要素でのキー入力のたびに呼び出される
   textChange(event) {
-    this.setState({text: event.target.value});
+    this.setState({ text: event.target.value });
   }
 
 
   // コメント送信
   submitClick(event) {
     const room = this.state.room;
-    if(this.state.text.length > 0) {
+    if (this.state.text.length > 0) {
       const timestamp = firebase.firestore.Timestamp.now().seconds + firebase.firestore.Timestamp.now().nanoseconds * 0.000000001;
       db.collection("data").doc(room).collection("comment").doc(String(timestamp)).set({
         text: this.state.text,
@@ -66,15 +68,15 @@ export default class Input extends React.Component {
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         color: this.state.getColor,
       })
-      .then((docRef) => {
+        .then((docRef) => {
           console.log('次のメッセージが送信されました: ' + this.state.text + '\nID: ' + timestamp + '\nROOM: ' + room);
-      })
-      .catch((error) => {
+        })
+        .catch((error) => {
           console.error("Error adding document: ", error);
-      });
-      alert('次のメッセージが送信されました: ' + this.state.text + ' in ' + timestamp);
+        });
+      // alert('次のメッセージが送信されました: ' + this.state.text + ' in ' + timestamp);
       event.preventDefault();
-      this.setState({text: ""})
+      this.setState({ text: "" })
     } else {
       alert('コメントを送信するには1文字以上入力してください')
     }
@@ -90,15 +92,14 @@ export default class Input extends React.Component {
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       color: this.state.getColor,
     })
-    .then((docRef) => {
+      .then((docRef) => {
         console.log('次の質問が送信されました: ' + this.state.text + '\nID: ' + timestamp + '\nROOM: ' + room);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.error("Error adding document: ", error);
-    });
-    alert('次のメッセージが質問として送信されました: ' + this.state.text + ' in ' + timestamp);
+      });
     event.preventDefault();
-    this.setState({text: ""})
+    this.setState({ text: "" })
   }
 
   // 絵文字を送る処理
@@ -110,30 +111,30 @@ export default class Input extends React.Component {
       username: "anonymous",
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    .then((docRef) => {
+      .then((docRef) => {
         console.log('絵文字 :' + emojiname + ': が送信されました\nID: ' + timestamp);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.error("Error adding document: ", error);
-    });
-    alert('絵文字 :' + emojiname + ': が送信されました at ' + timestamp);
+      });
+    // alert('絵文字 :' + emojiname + ': が送信されました at ' + timestamp);
   }
 
   changeModalVisible(event) {
-    this.setState({setIsOpen: !this.state.setIsOpen, modalIsOpen: !this.state.modalIsOpen});
+    this.setState({ setIsOpen: !this.state.setIsOpen, modalIsOpen: !this.state.modalIsOpen });
     console.log(this.state.setIsOpen, this.state.modalIsOpen);
   }
-  
+
 
   // カスタム絵文字の名前を変更する処理
   changeEmojiId(event) {
-    this.setState({customEmojiId: event.target.value});
+    this.setState({ customEmojiId: event.target.value });
   }
 
   // カスタム絵文字のアップロード
   uploadImage(event) {
     const image = event.target.files[0];
-    this.setState({customEmojiImage: image});
+    this.setState({ customEmojiImage: image });
     console.log(this.state.customEmojiImage);
   }
 
@@ -144,9 +145,9 @@ export default class Input extends React.Component {
     const thisBind = this;
     console.log(customEmojiId, img);
 
-    if(customEmojiId && img) {
+    if (customEmojiId && img) {
       const room = this.state.room;
-      let storageRef = firebase.storage().ref().child(customEmojiId+`.png`);
+      let storageRef = firebase.storage().ref().child(room + `/` + customEmojiId + `.png`);
 
       // const blob = firebase.firestore.Blob.fromUint8Array(img);
       // console.log(blob)
@@ -165,26 +166,26 @@ export default class Input extends React.Component {
 
       // db.doc('/data/' + room + "emojiList" + customEmojiId).set(img, { merge: true }).catch(error => console.log(error));
 
-      storageRef.getMetadata().then(function(metadata) {
+      storageRef.getMetadata().then(function (metadata) {
         console.log("このファイルは存在しています");
         alert("この名前はすでに使用されています");
-      }).catch(function(error) {
-        if(error.code == "storage/object-not-found") {
+      }).catch(function (error) {
+        if (error.code == "storage/object-not-found") {
           console.log("ファイルはまだ存在しません", error.code);
           storageRef.put(img)
-            .then(function(snapshot) {
+            .then(function (snapshot) {
               alert(":" + customEmojiId + ": が追加されました");
-              thisBind.setState({setIsOpen: !thisBind.state.setIsOpen, modalIsOpen: !thisBind.state.modalIsOpen});
+              thisBind.setState({ setIsOpen: !thisBind.state.setIsOpen, modalIsOpen: !thisBind.state.modalIsOpen });
             });
           db.collection("data").doc(room).collection("emojiList").doc(customEmojiId).set({
-            url: strageDlUrl + customEmojiId + ".png",
+            url: strageDlUrl + room + "/" + customEmojiId + ".png",
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           })
-          .then((docRef) => {
-          })
-          .catch((error) => {
+            .then((docRef) => {
+            })
+            .catch((error) => {
               console.error("Error adding document: ", error);
-          });
+            });
         }
       });
       this.showMoreEmoji();
@@ -195,7 +196,7 @@ export default class Input extends React.Component {
 
   // すべての絵文字を表示する
   showMoreEmoji(event) {
-    this.setState({showEmoji: !this.state.showEmoji})
+    this.setState({ showEmoji: !this.state.showEmoji })
     console.log(this.state.showEmoji);
     console.log(this.state.emojiList, ['alligator', 'snake', 'lizard']);
 
@@ -204,51 +205,63 @@ export default class Input extends React.Component {
 
   // カスタム絵文字を表示する
   displayCustomEmoji() {
+    let searchStr = this.state.searchEmoji;
     let listAry = [];
     let listUrlAry = [];
-    
+
     db.collection("data").doc(this.state.room).collection("emojiList").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        let gsReference = firebase.storage().refFromURL(strageDlUrl + doc.id + ".png");
-        
-        gsReference.getDownloadURL().then(function(url) {
+        let gsReference = firebase.storage().refFromURL(doc.data().url);
+
+        gsReference.getDownloadURL().then(function (url) {
           // `url` is the download URL for 'images/stars.jpg'
-          listAry.push(doc.id);
-          listUrlAry.push(url);
-        }).catch(function(error) {
+          if (doc.id.indexOf(searchStr) != -1) {
+            listAry.push(doc.id);
+            listUrlAry.push(url);
+          }
+        }).catch(function (error) {
           console.log("画像データの取得に失敗しました", error)
         });
       });
     })
-    this.setState({emojiList: listAry});
-    this.setState({emojiUrlList: listUrlAry});
+    this.setState({ emojiList: listAry });
+    this.setState({ emojiUrlList: listUrlAry });
 
-    this.setState({loadingModal: true});
+    this.setState({ loadingModal: true });
     this.afterLoadingModal();
+  }
+
+  // 絵文字検索機能
+  searchName(event) {
+    this.setState({ searchEmoji: event.target.value });
+  }
+
+  searchBtn(event) {
+    this.displayCustomEmoji();
   }
 
   // カスタム絵文字をFirebaseから読み込むまでのローディング画面
   afterLoadingModal(event) {
-    setTimeout(function(){
-      this.setState({successCreate: false})
-    }.bind(this),800)
-    this.setState({loadingModal: false});
+    setTimeout(function () {
+      this.setState({ successCreate: false })
+    }.bind(this), 800)
+    this.setState({ loadingModal: false });
   }
 
   // 文字の装飾
   changeEditModalVisible(event) {
-    this.setState({editSetIsOpen: !this.state.editSetIsOpen, editModalIsOpen: !this.state.editModalIsOpen});
+    this.setState({ editSetIsOpen: !this.state.editSetIsOpen, editModalIsOpen: !this.state.editModalIsOpen });
     console.log(this.state.editSetIsOpen, this.state.editModalIsOpen);
   }
 
   getColor(color) {
-    this.setState({getColor: color});
+    this.setState({ getColor: color });
   }
 
-  render()  {
+  render() {
     const emojis = this.state.emojiList;
     const listItems = new Array;
-    for(let i=0; i<emojis.length; i++){
+    for (let i = 0; i < emojis.length; i++) {
       console.log(emojis[i])
       listItems.push(<li key={emojis[i].toString()}>{emojis[i]}</li>)
     }
@@ -267,29 +280,30 @@ export default class Input extends React.Component {
                 <img src={Question32Img} />
               </button>
             </div>
-            <div className='editButton'>
-              <button name='edit-comment' type='button' title="コメントの装飾" 
-              onClick={this.changeEditModalVisible}>
-                  <img src={editImg} />
+            <div>
+              <button name='edit-comment' type='button' title="コメントの装飾"
+                className='editButton'
+                onClick={this.changeEditModalVisible}>
+                <img src={editImg} />
               </button>
             </div>
           </form>
 
           {/* コメント装飾のモーダル */}
           <Modal isOpen={this.state.editModalIsOpen}
-          onRequestClose={this.changeEditModalVisible}>
+            onRequestClose={this.changeEditModalVisible}>
             <div className='editComment'>
               <p>コメントの文字色変更</p>
               <button type='button' className='colorBtn blackbtn'
-              onClick={this.getColor.bind(this, "black")}></button>
+                onClick={this.getColor.bind(this, "black")}></button>
               <button type='button' className='colorBtn redbtn'
-              onClick={this.getColor.bind(this, "red")}></button>
+                onClick={this.getColor.bind(this, "red")}></button>
               <button type='button' className='colorBtn bluebtn'
-              onClick={this.getColor.bind(this, "blue")}></button>
+                onClick={this.getColor.bind(this, "blue")}></button>
               <button type='button' className='colorBtn yellowbtn'
-              onClick={this.getColor.bind(this, "yellow")}></button>
+                onClick={this.getColor.bind(this, "yellow")}></button>
               <button type='button' className='colorBtn greenbtn'
-              onClick={this.getColor.bind(this, "green")}></button>
+                onClick={this.getColor.bind(this, "green")}></button>
             </div>
             <button onClick={this.changeEditModalVisible} className='addEmoji'>閉じる</button>
           </Modal>
@@ -309,28 +323,27 @@ export default class Input extends React.Component {
                 <img src={clapImg}></img>
               </a>
             </div>
-            <button type='button' className="switchMoreEmoji" onClick={this.showMoreEmoji}>{this.state.showEmoji ? "隠す" : "もっと見る" }</button>
+            <button type='button' className="switchMoreEmoji" onClick={this.showMoreEmoji}>{this.state.showEmoji ? "隠す" : "もっと見る"}</button>
             <div className={this.state.showEmoji ? "visible emojiArea" : "invisible emojiArea"}>
-              <a onClick={this.sendEmoji.bind(this, "wave")}>
-                <img src={waveImg}></img>
-              </a>
-              <a onClick={this.sendEmoji.bind(this, "ok")}>
-                <img src={okImg}></img>
-              </a>
-              <>{this.state.emojiList}</>
+              <div className="searchArea">
+                <input type="text" className="searchBox" onChange={this.searchName}></input>
+                <a className="searchBtn" onClick={this.searchBtn} title="検索"><img src={searchImg} /></a>
+              </div>
               {this.state.emojiList.map(reptile => (
                 <a key={reptile} onClick={this.sendEmoji.bind(this, reptile)} title={reptile}><img src={this.state.emojiUrlList[this.state.emojiList.indexOf(reptile)]} /></a>
               ))}
-              <button type='button' className="addEmoji" onClick={this.changeModalVisible}>絵文字を追加</button>
+              <button type='button' className="addEmojiBtn" onClick={this.changeModalVisible}>絵文字<br />を追加</button>
             </div>
             <Modal
               isOpen={this.state.modalIsOpen}
               contentLabel="Example Modal"
             >
               <button className="addEmoji" onClick={this.changeModalVisible}>キャンセル</button>
-              <div>絵文字を追加</div>
-              <input type="text" onChange={this.changeEmojiId}></input>
-              <input type="file" accept=".png" onChange={this.uploadImage} />
+              <div className="emojiAddArea">
+                <div>絵文字を追加</div>
+                <input type="text" onChange={this.changeEmojiId}></input>
+                <input type="file" accept=".png" onChange={this.uploadImage} />
+              </div>
               <button className="addEmoji" onClick={this.addEmoji}>絵文字を追加</button>
             </Modal>
             <Modal isOpen={this.state.loadingModal}><div>読み込み中</div></Modal>
