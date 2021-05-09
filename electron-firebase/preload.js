@@ -25,18 +25,17 @@ window.ipcRenderer.on('asynchronous-reply', (event, arg) => {
 //コメントが更新されたのをmain.jsから受け取る
 window.ipcRenderer.on('comment', (event, arg) => {
   // alert(arg);
-  var box = document.getElementById("IDsample02");
+  const box = document.getElementById("IDsample02");
   const comment_elem = document.createElement("li");
   comment_elem.innerHTML = arg;
   box.appendChild(comment_elem);
-  // sleep(3, function () {
-  //   comment_elem.remove();
-  // });
+  sleep(30, function () {
+    comment_elem.remove();
+  });
 });
 
-//絵文字が送信されたのをmain.jsから受け取る
-//何故か動作しない
-window.ipcRenderer.on('emojiList', (event, arg) => {
+//絵文字の送信をmain.jsから受け取る
+window.ipcRenderer.on('reaction', (event, arg) => {
   // 風船の追加・表示
   const balloon_elem = document.createElement("div")
   balloon_elem.classList.add("balloon_emoji")
@@ -52,8 +51,7 @@ window.ipcRenderer.on('emojiList', (event, arg) => {
   });
 });
 
-//質問が送信されたのをmain.jsから受け取る
-//何故か動作しない
+//質問の送信をmain.jsから受け取る
 window.ipcRenderer.on('question', (event, arg) => {
   // ?マークの追加・表示
   const balloon_elem = document.createElement("div")

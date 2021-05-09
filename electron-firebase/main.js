@@ -79,6 +79,7 @@ function createWindow () {
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 }
+
 app.whenReady().then(() => {
     createWindow();
     const db = firebase.firestore();
@@ -90,9 +91,97 @@ app.whenReady().then(() => {
         // event.senderに送信元のプロセスが設定されているので、asynchronous-replyチャンネルで文字列"pong"を非同期通信で送信元に送信
         event.sender.send('asynchronous-reply', 'pong');
         // ※event.senderはwebContentsオブジェクト
-
     });
-    
+
+    // 複数ファイルを読み込みたいときの onSnapshot
+    db.collection("data").doc('22').collection('comment').onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log("Current data: ", doc.data());
+            mainWindow.webContents.on('did-finish-load', ()=>{
+                // preload.jsの受信箱にデータを送信してる 
+                // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
+                mainWindow.webContents.send('comment', doc.data().text);
+            })
+        });
+
+        querySnapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log("new: ", change.doc.data());
+                mainWindow.webContents.on('did-finish-load', ()=>{
+                    // preload.jsの受信箱にデータを送信してる 
+                    // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
+                    mainWindow.webContents.send('comment', change.doc.data().text);
+                })
+            }
+            if (change.type === "modified") {
+                console.log("Modified: ", change.doc.data());
+            }
+            if (change.type === "removed") {
+                console.log("Removed: ", change.doc.data());
+            }
+        });
+
+    },(error) =>{
+        console.log("error in snapshot");
+    });
+
+    // 絵文字リストの一括読み込み
+    db.collection("data").doc('22').collection('reaction').onSnapshot((querySnapshot) => {
+        // querySnapshot.forEach((doc) => {
+        //     console.log("Current data: ", doc.data());
+        //     // mainWindow.webContents.on('did-finish-load', ()=>{
+        //         mainWindow.webContents.send('reaction', doc.data().emoji);
+        //     // })
+        // });
+        querySnapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log("new: ", change.doc.data());
+                mainWindow.webContents.on('did-finish-load', ()=>{
+                    // preload.jsの受信箱にデータを送信してる 
+                    // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
+                    mainWindow.webContents.send('reaction', change.doc.data().text);
+                })
+            }
+            if (change.type === "modified") {
+                console.log("Modified: ", change.doc.data());
+            }
+            if (change.type === "removed") {
+                console.log("Removed: ", change.doc.data());
+            }
+        });
+    },(error) =>{
+        console.log("error in snapshot");
+    });
+
+    // 質問リストの一括読み込み
+    db.collection("data").doc('22').collection('question').onSnapshot((querySnapshot) => {
+        // querySnapshot.forEach((doc) => {
+        //     console.log("Current data: ", doc.data());
+        //     // mainWindow.webContents.on('did-finish-load', ()=>{
+        //         mainWindow.webContents.send('question', doc.data().text);
+        //     // })
+        // });
+
+        querySnapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log("new: ", change.doc.data());
+                mainWindow.webContents.on('did-finish-load', ()=>{
+                    // preload.jsの受信箱にデータを送信してる 
+                    // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
+                    mainWindow.webContents.send('question', change.doc.data().text);
+                })
+            }
+            if (change.type === "modified") {
+                console.log("Modified: ", change.doc.data());
+            }
+            if (change.type === "removed") {
+                console.log("Removed: ", change.doc.data());
+            }
+        });
+    },(error) =>{
+        console.log("error in snapshot");
+    });
+
     // ひとつずつデータを取ってくる方法 get()
     // const docRef = db.collection('data').doc('room1').collection('emojiList').doc('none');
     // docRef.get().then((doc) => {
@@ -113,44 +202,6 @@ app.whenReady().then(() => {
     //     console.log(source, " data: ", doc.data());
     //     // console.log("Current data: ", doc.data());
     // });
-
-    // 複数ファイルを読み込みたいときの onSnapshot
-    db.collection("data").doc('room1').collection('comment').onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log("Current data: ", doc.data());
-            mainWindow.webContents.on('did-finish-load', ()=>{
-                // preload.jsの受信箱にデータを送信してる 
-                // 本来はレンダラー側のjsどれでもipc通信が使えるはずだけど、なんかrequireできないのでpreload.jsに直接レンダラー側の処理を書いてる
-                mainWindow.webContents.send('comment', doc.data().text);
-            })
-        });
-    },(error) =>{
-        console.log("error in snapshot");
-    });
-
-    // 絵文字の読み込み
-    db.collection("data").doc('room1').collection('emojiList').onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log("Current data: ", doc.data());
-            mainWindow.webContents.on('did-finish-load', ()=>{
-                mainWindow.webContents.send('emojiList', doc.data().url);
-            })
-        });
-    },(error) =>{
-        console.log("error in snapshot");
-    });
-
-    // 質問の読み込み
-    db.collection("data").doc('room1').collection('question').onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log("Current data: ", doc.data());
-            mainWindow.webContents.on('did-finish-load', ()=>{
-                mainWindow.webContents.send('question', doc.data().text);
-            })
-        });
-    },(error) =>{
-        console.log("error in snapshot");
-    });
 
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
