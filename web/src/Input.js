@@ -74,7 +74,7 @@ export default class Input extends React.Component {
         .catch((error) => {
           console.error("Error adding document: ", error);
         });
-      alert('次のメッセージが送信されました: ' + this.state.text + ' in ' + timestamp);
+      // alert('次のメッセージが送信されました: ' + this.state.text + ' in ' + timestamp);
       event.preventDefault();
       this.setState({ text: "" })
     } else {
@@ -98,7 +98,6 @@ export default class Input extends React.Component {
       .catch((error) => {
         console.error("Error adding document: ", error);
       });
-    alert('次のメッセージが質問として送信されました: ' + this.state.text + ' in ' + timestamp);
     event.preventDefault();
     this.setState({ text: "" })
   }
@@ -118,7 +117,7 @@ export default class Input extends React.Component {
       .catch((error) => {
         console.error("Error adding document: ", error);
       });
-    alert('絵文字 :' + emojiname + ': が送信されました at ' + timestamp);
+    // alert('絵文字 :' + emojiname + ': が送信されました at ' + timestamp);
   }
 
   changeModalVisible(event) {
