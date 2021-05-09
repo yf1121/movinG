@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: 12.x
     - name: npm install
-      run: cd ./electron-readus && npm install
+      run: cd ./electron-readus && npm install && npm install -D electron-builder
     # ここでアプリをビルド
     - name: build application
       run: cd ./electron-readus && electron-builder --mac --x64
@@ -53,7 +53,7 @@ jobs:
       with:
         node-version: 12.x
     - name: npm install
-      run: cd ./electron-readus && npm install
+      run: cd ./electron-readus && npm install && npm install -D electron-builder
     - name: build application
       run: cd ./electron-readus && electron-builder --win --x64
       env:
