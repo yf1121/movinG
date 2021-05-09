@@ -23,15 +23,21 @@
       "**/*"
     ],
     "mac": {
+      "icon": "src/icon.icns",
       "target": [
         "dmg"
       ]
     },
     "win": {
+      "icon": "src/icon.ico",
       "target": "nsis"
     },
     "linux": {
       "category": "Utility"
+    },
+    "nsis":{
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "author": "",
