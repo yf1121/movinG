@@ -27,10 +27,10 @@ jobs:
       with:
         node-version: 12.x
     - name: npm install
-      run: cd ./electron-readus && npm install && npm install -D electron-builder
+      run: cd ./electron-firebase && npm install && npm install -D electron-builder
     # ここでアプリをビルド
     - name: build application
-      run: cd ./electron-readus && npm run build --mac --x64
+      run: cd ./electron-firebase && npm run build --mac --x64
       env:
           CI: false
     # Release の作成とビルドしたパッケージのアップロード
@@ -42,7 +42,7 @@ jobs:
         draft: true
         # アップロード対象となるファイル名
         files: |
-          ./electron-readus/dist/*.dmg
+          ./electron-firebase/dist/*.dmg
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,9 +56,9 @@ jobs:
       with:
         node-version: 12.x
     - name: npm install
-      run: cd ./electron-readus && npm install && npm install -D electron-builder
+      run: cd ./electron-firebase && npm install && npm install -D electron-builder
     - name: build application
-      run: cd ./electron-readus && npm run build --win --x64
+      run: cd ./electron-firebase && npm run build --win --x64
       env:
           CI: false
     - name: create release
@@ -67,6 +67,6 @@ jobs:
       with:
         draft: true
         files: |
-          ./electron-readus/dist/*.exe
+          ./electron-firebase/dist/*.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
