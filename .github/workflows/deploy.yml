@@ -10,28 +10,25 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    working-directory: ./functions
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # yarn installを実行します
-      - name: Install
-        uses: borales/actions-yarn@v2.0.0
+      - name: ChangeDirectory
+        uses: actions/setup-node@v1
         with:
-          cmd: install
-      # yarn buildを実行します (production用のコマンドが異なる場合はcmdの部分を書き換えてください)
-      - name: Build
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: build
+          node-version: ${{ matrix.node-version }}
+      - run: cd ./web; npm ci
+      - run: cd ./web; npm run build --if-present
+        env:
+          CI: false
       # ビルドした成果物を保存します。ビルド結果のパスがbuildではない場合は書き換えてください
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
           name: build
-          path: build
+          path: ./web/build
   deploy:
     name: Deploy
     # もし前段のbuildが通らなかったらこっちは動作しません
@@ -45,11 +42,12 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: build
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+          path: ./web/build
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-	  # 必要に応じて引数を足したりしてください
-          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          node-version: "12.x"
+      - name: Install firebase cli
+        run: cd web; npm install -g firebase-tools
+      - name: Deploy
+        run: cd web; firebase deploy --project ${{ secrets.FIREBASE_PROJECT_ID }} --token ${{ secrets.FIREBASE_TOKEN }}
