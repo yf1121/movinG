@@ -5,9 +5,9 @@
 
 ## デプロイ先とインストール
 - デプロイ先（参加者用インターフェイス）
-    - [moving-5e9c4.web.app](moving-5e9c4.web.app)
+    - [moving-5e9c4.web.app](https://moving-5e9c4.web.app)
 - 発表者用ネイティブアプリ
-    - releseからダウンロードできます。（予定）
+    - [relese](https://github.com/yf1121/movinG/releases)からダウンロードできます。
 
 ## 開発メンバー
 - kaho819  
